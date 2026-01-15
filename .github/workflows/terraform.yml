@@ -1,0 +1,78 @@
+name: Terraform (plan on PR, apply on main)
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+env:
+  TF_VERSION: '1.5.0'
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - env_name: lab-nonprod-we
+            tfvars: lab-nonprod-we.tfvars
+          - env_name: lab-prod-we
+            tfvars: lab-prod-we.tfvars
+    defaults:
+      run:
+        working-directory: infra-azureiaasappgw
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Select workspace
+        run: |
+          terraform workspace select ${{ matrix.env_name }} || terraform workspace new ${{ matrix.env_name }}
+
+      - name: Terraform Plan
+        run: terraform plan -no-color -var-file="${{ matrix.tfvars }}"
+
+  apply:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        include:
+          - env_name: lab-nonprod-we
+            tfvars: lab-nonprod-we.tfvars
+          - env_name: lab-prod-we
+            tfvars: lab-prod-we.tfvars
+    defaults:
+      run:
+        working-directory: infra-azureiaasappgw
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Select workspace
+        run: |
+          terraform workspace select ${{ matrix.env_name }} || terraform workspace new ${{ matrix.env_name }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var-file="${{ matrix.tfvars }}"

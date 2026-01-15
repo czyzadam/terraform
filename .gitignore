@@ -1,0 +1,29 @@
+# Local .terraform directories
+.terraform/
+
+# .terraform-version
+.terraform-version
+
+# Terraform Binary
+terraform
+
+# Terraform .terraform.lock.hcl
+.terraform.lock.hcl
+
+# Terraform Plan
+*.tfplan
+*.tfplan.json
+
+# Terraform State
+*.tfstate
+*.tfstate.*
+
+# Terraform Variables
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration
+.terraformrc
+terraform.rc
