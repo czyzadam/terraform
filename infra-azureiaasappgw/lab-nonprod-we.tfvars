@@ -32,20 +32,7 @@ application_gateway_details = {
         probe_host_name_override            = false
         probe_host_name_override_hostname   = ""
       }
-      app2-80 = {
-        fqdns                               = []
-        ip_addresses                        = ["10.0.12.20"]
-        cookie_based_affinity               = "Disabled"
-        port                                = 80
-        path                                = "/health"
-        protocol                            = "Http"
-        request_timeout                     = 30
-        host_name_override                  = true
-        pick_host_name_from_backend_address = true
-        host_name                           = ""
-        probe_host_name_override            = false
-        probe_host_name_override_hostname   = ""
-      }
+
     }
 
     listeners = {
