@@ -45,15 +45,7 @@ application_gateway_details = {
         custom_error_page_url = ""
         firewall_policy_id    = ""
       }
-      app2-80 = {
-        host_names            = ["app2.lab.example.com"]
-        public                = true
-        port                  = 80
-        protocol              = "Http"
-        ssl_certificate_name  = ""
-        custom_error_page_url = ""
-        firewall_policy_id    = ""
-      }
+
     }
 
     basic_routing_rules = {
@@ -61,11 +53,6 @@ application_gateway_details = {
         listener = "app1-80"
         backend  = "app1-80"
         priority = 1
-      }
-      app2-80-rule = {
-        listener = "app2-80"
-        backend  = "app2-80"
-        priority = 2
       }
     }
 
