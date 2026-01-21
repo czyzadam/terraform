@@ -32,11 +32,11 @@ application_gateway_details = {
         probe_host_name_override            = false
         probe_host_name_override_hostname   = ""
       }
-      app2-80 = {
+      app2-81 = {
         fqdns                               = []
         ip_addresses                        = ["10.0.12.20"]
         cookie_based_affinity               = "Disabled"
-        port                                = 80
+        port                                = 81
         path                                = "/health"
         protocol                            = "Http"
         request_timeout                     = 30
